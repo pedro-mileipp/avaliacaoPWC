@@ -3,25 +3,25 @@
 #include <sstream>
 #include <stack>
 
-std::string reverseOrdemPalavras(std::string frase) {
+std::string reverseOrdemPalavras(std::string entrada) {
     std::stack<std::string> pilha;
-    std::stringstream ssAux(frase);
-    std::string palavra;
+    std::stringstream ssAux(entrada);
+    std::string palavras;
     
-    // Separando as palavras da frase e empilhando na pilha
-    while (ssAux >> palavra) {
-        pilha.push(palavra);
+    // extrai o fluxo de ssAux para palavras
+    while (ssAux >> palavras) {
+        pilha.push(palavras); // ao colocar na pilha as palavras, a ordem dos elementos já será invertida
     }
     
-    std::string fraseInversa;
+    std::string fraseInversa; //string que receberá o resultado final
     
     // Construindo a frase revertida desempilhando as palavras
     while (!pilha.empty()) {
-        fraseInversa += pilha.top();
-        pilha.pop();
+        fraseInversa += pilha.top(); // colocar o topo da pilha na fraseInversa
+        pilha.pop(); // exclui o topo da pilha
         
         if (!pilha.empty()) {
-            fraseInversa += " ";
+            fraseInversa += " "; // se a pilha não estiver vazia, imprime um espaço em branco
         }
     }
     

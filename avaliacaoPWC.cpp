@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <stack>
+#include <unordered_set>
 
 std::string reverseOrdemPalavras(std::string entrada) {
     std::stack<std::string> pilha;
@@ -28,6 +29,23 @@ std::string reverseOrdemPalavras(std::string entrada) {
     return fraseInversa;
 }
 
+
+std::string removerCaracteresDuplicados(const std::string& frase) {
+    std::unordered_set<char> caracteresDaEntrada; // Conjunto para armazenar os caracteres únicos encontrados
+    std::string fraseSemDuplicados; // String para armazenar a frase sem caracteres duplicados
+
+    // Percorre cada caractere na frase
+    for (char c : frase) {
+        // Verifica se o caractere já está presente no conjunto
+        if (caracteresDaEntrada.find(c) == caracteresDaEntrada.end()) {
+            caracteresDaEntrada.insert(c); // Se o caractere não estiver presente, insere no conjunto
+            fraseSemDuplicados += c; // Adiciona o caractere à frase sem duplicados
+        }
+    }
+
+    return fraseSemDuplicados; // Retorna a frase sem caracteres duplicados
+}
+
 int main() {
     std::string dadosEntrada;
     printf("Digite a frase: ");
@@ -38,6 +56,13 @@ int main() {
     printf("Frase revertida: %s\n", fraseRevertida.c_str());
 
     printf("\n");
+
+    char dadosEntrada2[100];
+    printf("Digite a frase: ");
+    scanf("%[^\n]s", dadosEntrada2);
+
+    std::string entradaSemDuplicados = removerCaracteresDuplicados(dadosEntrada2);
+    printf("Frase sem caracteres duplicados: %s\n", entradaSemDuplicados.c_str());
     
     return 0;
 }

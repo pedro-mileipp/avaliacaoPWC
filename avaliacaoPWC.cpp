@@ -3,6 +3,7 @@
 #include <sstream>
 #include <stack>
 #include <unordered_set>
+#include <algorithm>
 
 // Questao 1
 std::string reverseOrdemPalavras(std::string entrada) {
@@ -65,49 +66,56 @@ std::string removerCaracteresDuplicados(const std::string& fraseEntrada) {
     return fraseSemDuplicados; // Retorna a frase sem caracteres duplicados
 }
 
-
-// questao 3
-std::string encontrarSubstringPalindromicaMaisLonga(const std::string& stringEntrada) {
-    int n = stringEntrada.length();
-    int ini = 0; // Índice inicial da substring palindrômica mais longa encontrada
-    int tamanho = 1; // Tamanho da substring palindrômica mais longa encontrada
-    
-    // Inicializa e preenche a matriz de palíndromo
+std::string maiorSubstringPalindromoica(const std::string& str) {
+    int n = str.length();
     bool palindromo[n][n];
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            palindromo[i][j] = false;
-        }
-    }
-    
-    // Caso base: todos os caracteres individuais são palíndromos
+    std::fill_n(*palindromo, n * n, false);
+
+    // Todos os caracteres individuais são palíndromos
     for (int i = 0; i < n; i++) {
         palindromo[i][i] = true;
     }
-    
-    // Caso base: verifica substrings de tamanho 2
+
+    int inicio = 0;
+    int tamanho = 1;
+
+    // Verifica substrings de tamanho 2
     for (int i = 0; i < n - 1; i++) {
-        if (stringEntrada[i] == stringEntrada[i + 1]) {
+        if (str[i] == str[i + 1]) {
             palindromo[i][i + 1] = true;
-            ini = i;
+            inicio = i;
             tamanho = 2;
         }
     }
-    
+
     // Verifica substrings de tamanho maior que 2
     for (int len = 3; len <= n; len++) {
         for (int i = 0; i <= n - len; i++) {
             int j = i + len - 1;
-            if (stringEntrada[i] == stringEntrada[j] && palindromo[i + 1][j - 1]) {
+            if (str[i] == str[j] && palindromo[i + 1][j - 1]) {
                 palindromo[i][j] = true;
-                ini = i;
+                inicio = i;
                 tamanho = len;
             }
         }
     }
-    
-    // Retorna a substring palindrômica mais longa encontrada
-    return stringEntrada.substr(ini, tamanho);
+
+    return str.substr(inicio, tamanho);
+}
+
+bool verificaPalindromo(const std::string& str) {
+    std::string strProcessada = str;
+
+    // Remover espaços em branco e caracteres de pontuação
+    strProcessada.erase(std::remove_if(strProcessada.begin(), strProcessada.end(), [](unsigned char c) {
+        return std::isspace(c) || std::ispunct(c);
+    }), strProcessada.end());
+
+    // Converter para letras minúsculas para fazer a comparação sem diferenciação de maiúsculas e minúsculas
+    std::transform(strProcessada.begin(), strProcessada.end(), strProcessada.begin(), ::tolower);
+
+    // Verificar se a string processada é igual à sua inversa
+    return strProcessada == std::string(strProcessada.rbegin(), strProcessada.rend());
 }
 
 int main() {
@@ -133,6 +141,17 @@ int main() {
     }
 
     printf("\n");
+
+    std::string dadosEntrada3;
+    printf("Digite a string: ");
+    std::getline(std::cin, dadosEntrada3);
+
+    if (verificaPalindromo(dadosEntrada3)) {
+        std::string substringPalindromo = maiorSubstringPalindromoica(dadosEntrada3);
+        printf("Maior substring palindrômica: %s\n", substringPalindromo.c_str());
+    } else {
+        printf("A string não é palindrômica.\n");
+    }
     
     return 0;
 }

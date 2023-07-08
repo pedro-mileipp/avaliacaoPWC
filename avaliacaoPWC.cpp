@@ -29,7 +29,7 @@ std::string reverseOrdemPalavras(std::string entrada) {
     
     return fraseInversa;
 }
-bool temCaracteresDuplicados(const std::string& fraseEntrada) {
+bool verificaCaracteresDuplicados(const std::string& fraseEntrada) {
     std::unordered_set<char> caracteres; // Conjunto para armazenar os caracteres únicos encontrados
 
     // Percorre cada caractere na frase
@@ -65,6 +65,51 @@ std::string removerCaracteresDuplicados(const std::string& fraseEntrada) {
     return fraseSemDuplicados; // Retorna a frase sem caracteres duplicados
 }
 
+
+// questao 3
+std::string encontrarSubstringPalindromicaMaisLonga(const std::string& stringEntrada) {
+    int n = stringEntrada.length();
+    int ini = 0; // Índice inicial da substring palindrômica mais longa encontrada
+    int tamanho = 1; // Tamanho da substring palindrômica mais longa encontrada
+    
+    // Inicializa e preenche a matriz de palíndromo
+    bool palindromo[n][n];
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            palindromo[i][j] = false;
+        }
+    }
+    
+    // Caso base: todos os caracteres individuais são palíndromos
+    for (int i = 0; i < n; i++) {
+        palindromo[i][i] = true;
+    }
+    
+    // Caso base: verifica substrings de tamanho 2
+    for (int i = 0; i < n - 1; i++) {
+        if (stringEntrada[i] == stringEntrada[i + 1]) {
+            palindromo[i][i + 1] = true;
+            ini = i;
+            tamanho = 2;
+        }
+    }
+    
+    // Verifica substrings de tamanho maior que 2
+    for (int len = 3; len <= n; len++) {
+        for (int i = 0; i <= n - len; i++) {
+            int j = i + len - 1;
+            if (stringEntrada[i] == stringEntrada[j] && palindromo[i + 1][j - 1]) {
+                palindromo[i][j] = true;
+                ini = i;
+                tamanho = len;
+            }
+        }
+    }
+    
+    // Retorna a substring palindrômica mais longa encontrada
+    return stringEntrada.substr(ini, tamanho);
+}
+
 int main() {
     std::string dadosEntrada;
     printf("Digite a frase: ");
@@ -80,13 +125,14 @@ int main() {
     printf("Digite a frase: ");
     scanf("%[^\n]s", dadosEntrada2);
 
-    if (temCaracteresDuplicados(dadosEntrada2)) {
+    if (verificaCaracteresDuplicados(dadosEntrada2)) {
         std::string entradaSemDuplicados = removerCaracteresDuplicados(dadosEntrada2);
         printf("Frase sem caracteres duplicados: %s\n", entradaSemDuplicados.c_str());
     } else {
         printf("A frase digitada nao possui caracteres duplicados.\n");
     }
 
+    printf("\n");
     
     return 0;
 }

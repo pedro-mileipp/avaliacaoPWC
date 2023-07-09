@@ -14,13 +14,13 @@ bool verificaAnagramaPalindromo(const std::string& str) {
 
     // Verifica a contagem de caracteres
     for (const auto& par : contagemCaracteres) {
-        if (par.second % 2 != 0) {
+        if (`par.second % 2 != 0) {
             numCaracteresImpares++;
         }
     }
 
     // Retorna true se houver no máximo um caractere com contagem ímpar
-    return numCaracteresImpares <= 1;
+    return numCaracteresImpares <= 1;~
 }
 
 int main() {
